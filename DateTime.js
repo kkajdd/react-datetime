@@ -222,39 +222,70 @@ var Datetime = React.createClass({
 
 	updateSelectedDate: function( e, close ) {
 		var target = e.target,
-			modifier = 0,
-			viewDate = this.state.viewDate,
-			currentDate = this.state.selectedDate || viewDate,
-			date
-		;
-
-		if(target.className.indexOf("rdtNew") != -1)
-			modifier = 1;
-		else if(target.className.indexOf("rdtOld") != -1)
-			modifier = -1;
-
-		date = viewDate.clone()
-			.month( viewDate.month() + modifier )
-			.date( parseInt( target.getAttribute('data-value') ) )
-			.hours( currentDate.hours() )
-			.minutes( currentDate.minutes() )
-			.seconds( currentDate.seconds() )
-			.milliseconds( currentDate.milliseconds() )
-		;
-
-		if( !this.props.value ){
-			this.setState({
-				selectedDate: date,
-				viewDate: date.clone().startOf('month'),
-				inputValue: date.format( this.state.inputFormat )
-			}, function () {
-				if (this.props.closeOnSelect && close) {
-					this.closeCalendar();
-				}
-			});
-		}
-
-		this.props.onChange( date );
+        modifier = 0,
+        viewDate = this.state.viewDate,
+        currentDate = this.state.selectedDate || viewDate,
+        date;
+    ;
+    var cloneDate = moment(this.state.viewDate);
+  
+    switch(target.innerHTML)
+    {
+      case 'Jan':
+      cloneDate.month(0);
+      break;
+      case 'Feb':
+      cloneDate.month(1);
+      break;
+      case 'Mar':
+      cloneDate.month(2);
+      break;
+      case 'Apr':
+      cloneDate.month(3);
+      break;
+      case 'May':
+      cloneDate.month(4);
+      break;
+      case 'Jun':
+      cloneDate.month(5);
+      break;
+      case 'Jul':
+      cloneDate.month(6);
+      break;
+      case 'Aug':
+      cloneDate.month(7);
+      break;
+      case 'Sep':
+      cloneDate.month(8);
+      break;
+      case 'Oct':
+      cloneDate.month(9);
+      break;
+      case 'Nov':
+      cloneDate.month(10);
+      break;
+      case 'Dec':
+      cloneDate.month(11);
+      break;
+    }
+    if (target.className.indexOf("rdtNew") != -1)
+      modifier = 1;
+    else if (target.className.indexOf("rdtOld") != -1)
+      modifier = -1;
+    date = viewDate.clone().month(cloneDate.month()).date(parseInt(viewDate.date())).hours(viewDate.hours()).minutes(viewDate.minutes()).seconds(viewDate.seconds()).milliseconds(viewDate.milliseconds());
+    ;
+   // if (!this.props.value) {
+      this.setState({
+        selectedDate: date,
+        viewDate: date,
+        inputValue: date.format(this.state.inputFormat)
+      }, function() {
+        if (this.props.closeOnSelect && close) {
+          this.closeCalendar();
+        }
+      });
+   // }
+   this.props.onChange(date);
 	},
 
 	openCalendar: function() {
