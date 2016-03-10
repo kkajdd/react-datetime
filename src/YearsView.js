@@ -5,15 +5,15 @@ var React = require('react');
 var DOM = React.DOM;
 var DateTimePickerYears = React.createClass({
 	render: function() {
-		var year = parseInt(this.props.viewDate.year() / 10, 10) * 10;
+		var year = parseInt(new Date().getFullYear());
 
 		return DOM.div({ className: 'rdtYears' },[
 			DOM.table({ key: 'a'}, DOM.thead({}, DOM.tr({},[
-				DOM.th({ key: 'prev', className: 'rdtPrev' }, DOM.button({onClick: this.props.subtractTime(10, 'years'), type: 'button' }, '‹')),
-				DOM.th({ key: 'year', className: 'rdtSwitch', onClick: this.props.showView('years'), colSpan: 2 }, year + '-' + (year + 9) ),
-				DOM.th({ key: 'next', className: 'rdtNext'}, DOM.button({onClick: this.props.addTime(10, 'years'), type: 'button' }, '›'))
+				
+				DOM.th({ key: 'year', className: 'rdtSwitch', onClick: this.props.showView('years'), colSpan: 2 }, (year-10) + '-' + (year + 2) ),
+				
 				]))),
-			DOM.table({ key: 'years'}, DOM.tbody({}, this.renderYears( year )))
+			DOM.table({ key: 'years'}, DOM.tbody({}, this.renderYears( year-10 )))
 		]);
 	},
 
@@ -26,8 +26,8 @@ var DateTimePickerYears = React.createClass({
 			classes, props
 		;
 
-		year--;
-		while (i < 11) {
+		//year--;
+		while (i < 13) {
 			classes = 'rdtYear';
 			if( i === -1 | i === 10 )
 				classes += ' rdtOld';
@@ -38,7 +38,7 @@ var DateTimePickerYears = React.createClass({
 				key: year,
 				'data-value': year,
 				className: classes,
-				onClick: this.props.setDate('year')
+				onClick: this.updateSelectedDate
 			};
 
 			years.push( renderer( props, year, selectedDate && selectedDate.clone() ));
@@ -52,7 +52,13 @@ var DateTimePickerYears = React.createClass({
 			i++;
 		}
 
+		rows.push(DOM.tr({key:12},years.splice(0,1)));
+
 		return rows;
+	},
+
+	updateSelectedDate: function( event ) {
+		this.props.updateSelectedDate(event, true);
 	},
 
 	renderYear: function( props, year, selectedDate ){
