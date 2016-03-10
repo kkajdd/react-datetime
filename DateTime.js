@@ -228,6 +228,8 @@ var Datetime = React.createClass({
 			date
 		;
 
+		
+
 		if(target.className.indexOf("rdtNew") != -1)
 			modifier = 1;
 		else if(target.className.indexOf("rdtOld") != -1)
